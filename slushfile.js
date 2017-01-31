@@ -15,8 +15,8 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     _ = require('underscore.string'),
     inquirer = require('inquirer'),
-    path = require('path');
-    // inflection = require('inflection');
+    path = require('path'),
+    inflection = require('inflection');
 
 function format(string) {
     var username = string.toLowerCase();
@@ -110,7 +110,8 @@ gulp.task('view', function(done) {
         name: 'appFolder',
         message: 'What is the folder that contains your app?',
         default: ''
-    }, {
+    },
+    {
         type: 'confirm',
         name: 'moveon',
         message: 'Continue?'
@@ -141,4 +142,35 @@ gulp.task('controller', function(done) {
 
 gulp.task('service', function(done) {
     var _this = this;
+    var prompts = [{
+        name: 'appFolder',
+        message: 'What is the folder that contains your app?',
+        default: 'client'
+    }, {
+        name: 'appName',
+        message: 'What is the name of your app?',
+        default: 'itdocs'
+    }, {
+        type: 'confirm',
+        name: 'moveon',
+        message: 'Continue?'
+    }];
+    
+    inquirer.prompt(prompts,
+        function (answers) {
+            if (!answers.moveon) {
+                return done();
+            }
+
+            answers.serviceName = _this.args[0];
+            answers.serviceLCase = answers.serviceName.toLowerCase();
+            answers.serviceSingle = inflection.singularize(answers.serviceLCase);
+
+            gulp.src(__dirname + '/templates/service/service.js')
+                .pipe(template(answers))
+                .pipe(rename(answers.serviceLCase + 'Service.js'))
+                .pipe(conflict('./' + answers.appFolder + '/' + answers.serviceLCase))
+                .pipe(gulp.dest('./' + answers.appFolder + '/' + answers.serviceLCase));
+        }
+    );
 });
