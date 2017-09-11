@@ -1,0 +1,11 @@
+node_modules/
+bower_components/
+temp
+*.log
+.idea
+.env
+.c9
+data
+mongod
+.
+package-lock.json
