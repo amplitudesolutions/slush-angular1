@@ -1,7 +1,7 @@
 {
-  "name": "itdocs",
-  "version": "0.1.0",
-  "repository": "https://github.com/amplitudesolutions/itdocs.git",
+  "name": "<%= appName %>",
+  "version": "<%= appVersion%>",
+  "repository": "https://github.com/<%=userName%>/<%=appName%>.git",
   "license": "MIT",
   "dependencies": {
     "gulp": "^3.9.1",

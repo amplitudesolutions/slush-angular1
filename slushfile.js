@@ -51,7 +51,7 @@ var defaults = (function () {
     };
 })();
 
-gulp.task('default', function (done) {
+gulp.task('main', function (done) {
     var prompts = [{
         name: 'appName',
         message: 'What is the name of your project?',
@@ -87,7 +87,7 @@ gulp.task('default', function (done) {
                 return done();
             }
             answers.appNameSlug = _.slugify(answers.appName);
-            gulp.src(__dirname + '/templates/**')
+            gulp.src(__dirname + '/templates/src/**')
                 .pipe(template(answers))
                 .pipe(rename(function (file) {
                     if (file.basename[0] === '_') {
@@ -173,4 +173,10 @@ gulp.task('service', function(done) {
                 .pipe(gulp.dest('./' + answers.appFolder + '/' + answers.serviceLCase));
         }
     );
+});
+
+gulp.task('default', ['main'], function(done) {
+    gulp.src('./package.json')
+        .pipe(install());
+    done();
 });
